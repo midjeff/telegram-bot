@@ -3,7 +3,8 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-TOKEN = "7969209526:AAFCw18wdsESozuN7NXvoS85dlF5cj3_fwI"
+import os
+TOKEN = os.getenv("TOKEN")
 ADMIN_ID = "1501045648"
 
 bot = Bot(token=TOKEN)
@@ -12,8 +13,8 @@ dp = Dispatcher()
 # Главное меню
 main_kb = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="📅 Записаться")],
-        [KeyboardButton(text="ℹ️ О нас")]
+        [KeyboardButton(text="Записаться")],
+        [KeyboardButton(text="О нас")]
     ],
     resize_keyboard=True
 )
@@ -21,10 +22,10 @@ main_kb = ReplyKeyboardMarkup(
 # Выбор услуги
 service_kb = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="✂️ Стрижка")],
-        [KeyboardButton(text="🧔 Бритье")],
-        [KeyboardButton(text="💇 Комплекс")],
-        [KeyboardButton(text="⬅️ Назад")]
+        [KeyboardButton(text="Стрижка")],
+        [KeyboardButton(text="Заставь меня сиять, дядя")],
+        [KeyboardButton(text="Комплекс")],
+        [KeyboardButton(text="⬅ Назад")]
     ],
     resize_keyboard=True
 )
@@ -35,12 +36,12 @@ user_data = {}
 # Старт
 @dp.message(Command("start"))
 async def start(message: types.Message):
-    await message.answer("Добро пожаловать! 👋", reply_markup=main_kb)
+    await message.answer("Добро пожаловать! ", reply_markup=main_kb)
 
 # О нас
 @dp.message(lambda m: m.text == "ℹ️ О нас")
 async def about(message: types.Message):
-    await message.answer("Мы барбершоп. Работаем 24/7 💈")
+    await message.answer("Барбершоп анас. Работаем 24/7 💈")
 
 # Записаться
 @dp.message(lambda m: m.text == "📅 Записаться")
@@ -48,13 +49,13 @@ async def zapis(message: types.Message):
     await message.answer("Выберите услугу:", reply_markup=service_kb)
 
 # Выбор услуги
-@dp.message(lambda m: m.text in ["✂️ Стрижка", "🧔 Бритье", "💇 Комплекс"])
+@dp.message(lambda m: m.text in ["Стрижка", "Заставь меня сиять, дядя", "Комплекс"])
 async def choose_service(message: types.Message):
     user_data[message.from_user.id] = {"service": message.text}
     await message.answer("Введите ваше имя:")
 
 # Назад
-@dp.message(lambda m: m.text == "⬅️ Назад")
+@dp.message(lambda m: m.text == "⬅ Назад")
 async def back(message: types.Message):
     await message.answer("Главное меню", reply_markup=main_kb)
 
